@@ -11,9 +11,10 @@ class OptionGroup extends React.Component {
 		this.handleTouchEnd = this.handleTouchEnd.bind(this);
 		this.handleTouchMove = this.handleTouchMove.bind(this);
 		this.handleTouchStart = this.handleTouchStart.bind(this);
+		this.flattenNestedOptions = this.flattenNestedOptions.bind(this);
 	}
 
-	blockEvent (event) {
+	blockEvent(event) {
 		event.preventDefault();
 		event.stopPropagation();
 		if ((event.target.tagName !== 'A') || !('href' in event.target)) {
@@ -26,30 +27,39 @@ class OptionGroup extends React.Component {
 		}
 	}
 
-	handleMouseDown (event) {
+	handleMouseDown(event) {
 		event.preventDefault();
 		event.stopPropagation();
+		this.props.onSelect(this.flattenNestedOptions(this.props.option), event);
 	}
 
-	handleTouchEnd(event){
+	flattenNestedOptions(selectedOption) {
+		if (Array.isArray(selectedOption.options) && selectedOption.options.length) {
+			return selectedOption.options.map(option => this.flattenNestedOptions(option)).flat();
+		} else {
+			return selectedOption;
+		}
+	}
+
+	handleTouchEnd(event) {
 		// Check if the view is being dragged, In this case
 		// we don't want to fire the click event (because the user only wants to scroll)
-		if(this.dragging) return;
+		if (this.dragging) return;
 
 		this.handleMouseDown(event);
 	}
 
-	handleTouchMove (event) {
+	handleTouchMove(event) {
 		// Set a flag that the view is being dragged
 		this.dragging = true;
 	}
 
-	handleTouchStart (event) {
+	handleTouchStart(event) {
 		// Set a flag that the view is not being dragged
 		this.dragging = false;
 	}
 
-	render () {
+	render() {
 		var { option } = this.props;
 		var className = classNames(this.props.className, option.className);
 
@@ -60,21 +70,21 @@ class OptionGroup extends React.Component {
 				{this.props.children}
 			</div>
 		) : (
-			<div className={className}
-				style={option.style}
-				onMouseDown={this.handleMouseDown}
-				onMouseEnter={this.handleMouseEnter}
-				onMouseMove={this.handleMouseMove}
-				onTouchStart={this.handleTouchStart}
-				onTouchMove={this.handleTouchMove}
-				onTouchEnd={this.handleTouchEnd}
-				title={option.title}>
-				<div className="Select-option-group-label">
-					{this.props.label}
+				<div className={className}
+					style={option.style}
+					onMouseDown={this.handleMouseDown}
+					onMouseEnter={this.handleMouseEnter}
+					onMouseMove={this.handleMouseMove}
+					onTouchStart={this.handleTouchStart}
+					onTouchMove={this.handleTouchMove}
+					onTouchEnd={this.handleTouchEnd}
+					title={option.title}>
+					<div className="Select-option-group-label">
+						{this.props.label}
+					</div>
+					{this.props.children}
 				</div>
-				{this.props.children}
-			</div>
-		);
+			);
 	}
 };
 
@@ -82,6 +92,7 @@ OptionGroup.propTypes = {
 	children: PropTypes.any,
 	className: PropTypes.string,             // className (based on mouse position)
 	label: PropTypes.node,                   // the heading to show above the child options
+	onSelect: PropTypes.func,
 	option: PropTypes.object.isRequired,     // object that is base for that option group
 };
 

@@ -129,7 +129,8 @@ var menuRenderer = function menuRenderer(_ref) {
 						key: 'option-group-' + i,
 						label: renderLabel(option),
 						option: option,
-						optionIndex: i
+						optionIndex: i,
+						onSelect: onSelect
 					},
 					renderOptions(option.options)
 				);
@@ -584,6 +585,7 @@ var OptionGroup = function (_React$Component) {
 		_this.handleTouchEnd = _this.handleTouchEnd.bind(_this);
 		_this.handleTouchMove = _this.handleTouchMove.bind(_this);
 		_this.handleTouchStart = _this.handleTouchStart.bind(_this);
+		_this.flattenNestedOptions = _this.flattenNestedOptions.bind(_this);
 		return _this;
 	}
 
@@ -606,6 +608,20 @@ var OptionGroup = function (_React$Component) {
 		value: function handleMouseDown(event) {
 			event.preventDefault();
 			event.stopPropagation();
+			this.props.onSelect(this.flattenNestedOptions(this.props.option), event);
+		}
+	}, {
+		key: 'flattenNestedOptions',
+		value: function flattenNestedOptions(selectedOption) {
+			var _this2 = this;
+
+			if (Array.isArray(selectedOption.options) && selectedOption.options.length) {
+				return selectedOption.options.map(function (option) {
+					return _this2.flattenNestedOptions(option);
+				}).flat();
+			} else {
+				return selectedOption;
+			}
 		}
 	}, {
 		key: 'handleTouchEnd',
@@ -670,6 +686,7 @@ OptionGroup.propTypes = {
 	children: PropTypes.any,
 	className: PropTypes.string, // className (based on mouse position)
 	label: PropTypes.node, // the heading to show above the child options
+	onSelect: PropTypes.func,
 	option: PropTypes.object.isRequired // object that is base for that option group
 };
 

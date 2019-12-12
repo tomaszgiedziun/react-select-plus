@@ -42,7 +42,8 @@ const menuRenderer = ({
 						label={renderLabel(option)}
 						option={option}
 						optionIndex={i}
-						>
+						onSelect={onSelect}
+					>
 						{renderOptions(option.options)}
 					</OptionGroup>
 				);

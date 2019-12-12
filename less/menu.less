@@ -41,9 +41,14 @@
 	background-color: @select-option-bg;
 	color: @select-option-color;
 	font-weight: bold;
-	cursor: default;
+	cursor: pointer;
 	display: block;
 	padding: @select-padding-vertical @select-padding-horizontal;
+	&:hover{
+		background-color: @select-option-focused-bg-fb;  /* Fallback color for IE 8 */
+		background-color: @select-option-focused-bg;
+		color: @select-option-focused-color;
+	}
 }
 
 .Select-option-group-label ~ .Select-option,
@@ -72,7 +77,12 @@
 		color: @select-option-selected-color;
 	}
 
-	&.is-focused {
+	// &.is-focused {
+	// 	background-color: @select-option-focused-bg-fb;  /* Fallback color for IE 8 */
+	// 	background-color: @select-option-focused-bg;
+	// 	color: @select-option-focused-color;
+	// }
+	&:hover{
 		background-color: @select-option-focused-bg-fb;  /* Fallback color for IE 8 */
 		background-color: @select-option-focused-bg;
 		color: @select-option-focused-color;

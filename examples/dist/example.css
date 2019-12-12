@@ -253,9 +253,15 @@
   background-color: #fff;
   color: #666666;
   font-weight: bold;
-  cursor: default;
+  cursor: pointer;
   display: block;
   padding: 8px 10px;
+}
+.Select-option-group-label:hover {
+  background-color: #ebf5ff;
+  /* Fallback color for IE 8 */
+  background-color: rgba(0, 126, 255, 0.08);
+  color: #333;
 }
 .Select-option-group-label ~ .Select-option,
 .Select-option-group-label ~ .Select-option-group {
@@ -279,12 +285,11 @@
   background-color: rgba(0, 126, 255, 0.04);
   color: #333;
 }
-.Select-option.is-focused {
+/* .Select-option.is-focused {
   background-color: #ebf5ff;
-  /* Fallback color for IE 8 */
   background-color: rgba(0, 126, 255, 0.08);
   color: #333;
-}
+} */
 .Select-option.is-disabled {
   color: #cccccc;
   cursor: default;
